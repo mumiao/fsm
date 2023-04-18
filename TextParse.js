@@ -46,7 +46,7 @@ class TextParse {
     this.type;
   }
 
-  transition(input) {
+  performTransition(input) {
     const transition = TRANSITIONS.find(
       (t) => t.currentState === this.currentState && t.input === input.type
     );
@@ -81,7 +81,7 @@ function textParse(input) {
     const char = input[i];
 
     try {
-      const token = textParse.transition({
+      const token = textParse.performTransition({
         type: getInputType(char),
         value: char,
       });
@@ -95,7 +95,7 @@ function textParse(input) {
     }
   }
 
-    const lastToken = textParse.transition({ type: INPUTS.SPACE });
+  const lastToken = textParse.performTransition({ type: INPUTS.SPACE });
 
   if (lastToken) {
     tokens.push(lastToken);
@@ -119,6 +119,12 @@ function getInputType(char) {
 }
 
 // Example usage:
-console.log(textParse('123 abc "def ghi" 456')); // Output: ["123", "abc", "def ghi", "456"]
-// console.log(textParse('123 "hello" 456'));
-// console.log(textParse('1 2 3 "hello world"'));
+console.log(textParse('123 abc d "def ghi" 456')); 
+// [
+//   { type: 'number', value: '123' },
+//   { type: 'letter', value: 'abc' },
+//   { type: 'letter', value: '"def' },
+//   { type: 'letter', value: 'ghi' },
+//   { type: '', value: '' },
+//   { type: 'number', value: '456' }
+// ]
